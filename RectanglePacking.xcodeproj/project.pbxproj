@@ -11,11 +11,14 @@
 		68501DDD1BCD523B00E6104C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 68501DDC1BCD523B00E6104C /* AppDelegate.m */; };
 		68501DE01BCD523B00E6104C /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68501DDF1BCD523B00E6104C /* ViewController.m */; };
 		68501DE31BCD523B00E6104C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 68501DE11BCD523B00E6104C /* Main.storyboard */; };
-		68501DE61BCD523B00E6104C /* RectanglePacking.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 68501DE41BCD523B00E6104C /* RectanglePacking.xcdatamodeld */; };
 		68501DE81BCD523B00E6104C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 68501DE71BCD523B00E6104C /* Assets.xcassets */; };
 		68501DEB1BCD523B00E6104C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 68501DE91BCD523B00E6104C /* LaunchScreen.storyboard */; };
 		68501DF61BCD523B00E6104C /* RectanglePackingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 68501DF51BCD523B00E6104C /* RectanglePackingTests.m */; };
 		68501E011BCD523B00E6104C /* RectanglePackingUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 68501E001BCD523B00E6104C /* RectanglePackingUITests.m */; };
+		68501E131BCD564200E6104C /* Tile.m in Sources */ = {isa = PBXBuildFile; fileRef = 68501E121BCD564200E6104C /* Tile.m */; settings = {ASSET_TAGS = (); }; };
+		68501E171BCD5C1000E6104C /* UIColor+Random.m in Sources */ = {isa = PBXBuildFile; fileRef = 68501E161BCD5C1000E6104C /* UIColor+Random.m */; settings = {ASSET_TAGS = (); }; };
+		68501E1A1BCD6FC100E6104C /* NSMutableArray+MultiMutableArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 68501E191BCD6FC100E6104C /* NSMutableArray+MultiMutableArray.m */; settings = {ASSET_TAGS = (); }; };
+		68501E241BCDA5C200E6104C /* TileView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68501E231BCDA5C200E6104C /* TileView.m */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,7 +46,6 @@
 		68501DDE1BCD523B00E6104C /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		68501DDF1BCD523B00E6104C /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		68501DE21BCD523B00E6104C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		68501DE51BCD523B00E6104C /* RectanglePacking.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = RectanglePacking.xcdatamodel; sourceTree = "<group>"; };
 		68501DE71BCD523B00E6104C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		68501DEA1BCD523B00E6104C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		68501DEC1BCD523B00E6104C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -53,6 +55,15 @@
 		68501DFC1BCD523B00E6104C /* RectanglePackingUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RectanglePackingUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		68501E001BCD523B00E6104C /* RectanglePackingUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RectanglePackingUITests.m; sourceTree = "<group>"; };
 		68501E021BCD523B00E6104C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		68501E111BCD564200E6104C /* Tile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tile.h; sourceTree = "<group>"; };
+		68501E121BCD564200E6104C /* Tile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tile.m; sourceTree = "<group>"; };
+		68501E151BCD5C1000E6104C /* UIColor+Random.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Random.h"; sourceTree = "<group>"; };
+		68501E161BCD5C1000E6104C /* UIColor+Random.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Random.m"; sourceTree = "<group>"; };
+		68501E181BCD6FC100E6104C /* NSMutableArray+MultiMutableArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableArray+MultiMutableArray.h"; sourceTree = "<group>"; };
+		68501E191BCD6FC100E6104C /* NSMutableArray+MultiMutableArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableArray+MultiMutableArray.m"; sourceTree = "<group>"; };
+		68501E1E1BCD794300E6104C /* Unit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Unit.h; sourceTree = "<group>"; };
+		68501E221BCDA5C200E6104C /* TileView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TileView.h; sourceTree = "<group>"; };
+		68501E231BCDA5C200E6104C /* TileView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TileView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,15 +114,15 @@
 		68501DD71BCD523B00E6104C /* RectanglePacking */ = {
 			isa = PBXGroup;
 			children = (
+				68501E141BCD5BEC00E6104C /* Category */,
+				68501E0E1BCD528300E6104C /* ViewController */,
+				68501E211BCDA5AC00E6104C /* View */,
+				68501E0F1BCD529200E6104C /* Object */,
+				68501E101BCD52A200E6104C /* Storyboard */,
 				68501DDB1BCD523B00E6104C /* AppDelegate.h */,
 				68501DDC1BCD523B00E6104C /* AppDelegate.m */,
-				68501DDE1BCD523B00E6104C /* ViewController.h */,
-				68501DDF1BCD523B00E6104C /* ViewController.m */,
-				68501DE11BCD523B00E6104C /* Main.storyboard */,
 				68501DE71BCD523B00E6104C /* Assets.xcassets */,
-				68501DE91BCD523B00E6104C /* LaunchScreen.storyboard */,
 				68501DEC1BCD523B00E6104C /* Info.plist */,
-				68501DE41BCD523B00E6104C /* RectanglePacking.xcdatamodeld */,
 				68501DD81BCD523B00E6104C /* Supporting Files */,
 			);
 			path = RectanglePacking;
@@ -141,6 +152,54 @@
 				68501E021BCD523B00E6104C /* Info.plist */,
 			);
 			path = RectanglePackingUITests;
+			sourceTree = "<group>";
+		};
+		68501E0E1BCD528300E6104C /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = ViewController;
+			sourceTree = "<group>";
+		};
+		68501E0F1BCD529200E6104C /* Object */ = {
+			isa = PBXGroup;
+			children = (
+				68501DDE1BCD523B00E6104C /* ViewController.h */,
+				68501DDF1BCD523B00E6104C /* ViewController.m */,
+				68501E111BCD564200E6104C /* Tile.h */,
+				68501E121BCD564200E6104C /* Tile.m */,
+				68501E1E1BCD794300E6104C /* Unit.h */,
+			);
+			name = Object;
+			sourceTree = "<group>";
+		};
+		68501E101BCD52A200E6104C /* Storyboard */ = {
+			isa = PBXGroup;
+			children = (
+				68501DE11BCD523B00E6104C /* Main.storyboard */,
+				68501DE91BCD523B00E6104C /* LaunchScreen.storyboard */,
+			);
+			name = Storyboard;
+			sourceTree = "<group>";
+		};
+		68501E141BCD5BEC00E6104C /* Category */ = {
+			isa = PBXGroup;
+			children = (
+				68501E151BCD5C1000E6104C /* UIColor+Random.h */,
+				68501E161BCD5C1000E6104C /* UIColor+Random.m */,
+				68501E181BCD6FC100E6104C /* NSMutableArray+MultiMutableArray.h */,
+				68501E191BCD6FC100E6104C /* NSMutableArray+MultiMutableArray.m */,
+			);
+			name = Category;
+			sourceTree = "<group>";
+		};
+		68501E211BCDA5AC00E6104C /* View */ = {
+			isa = PBXGroup;
+			children = (
+				68501E221BCDA5C200E6104C /* TileView.h */,
+				68501E231BCDA5C200E6104C /* TileView.m */,
+			);
+			name = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -273,10 +332,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				68501E241BCDA5C200E6104C /* TileView.m in Sources */,
+				68501E171BCD5C1000E6104C /* UIColor+Random.m in Sources */,
 				68501DE01BCD523B00E6104C /* ViewController.m in Sources */,
+				68501E1A1BCD6FC100E6104C /* NSMutableArray+MultiMutableArray.m in Sources */,
 				68501DDD1BCD523B00E6104C /* AppDelegate.m in Sources */,
 				68501DDA1BCD523B00E6104C /* main.m in Sources */,
-				68501DE61BCD523B00E6104C /* RectanglePacking.xcdatamodeld in Sources */,
+				68501E131BCD564200E6104C /* Tile.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -520,19 +582,6 @@
 			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCVersionGroup section */
-		68501DE41BCD523B00E6104C /* RectanglePacking.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				68501DE51BCD523B00E6104C /* RectanglePacking.xcdatamodel */,
-			);
-			currentVersion = 68501DE51BCD523B00E6104C /* RectanglePacking.xcdatamodel */;
-			path = RectanglePacking.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = 68501DCD1BCD523B00E6104C /* Project object */;
 }
