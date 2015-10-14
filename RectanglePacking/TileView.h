@@ -7,7 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Tile.h"
 
 @interface TileView : UIView
+
+@property(nonatomic, strong, readonly) Tile *tile;
+
+- (instancetype)initWithTile:(Tile *)tile;
 
 @end

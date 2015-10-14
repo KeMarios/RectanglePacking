@@ -15,10 +15,10 @@
 		68501DEB1BCD523B00E6104C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 68501DE91BCD523B00E6104C /* LaunchScreen.storyboard */; };
 		68501DF61BCD523B00E6104C /* RectanglePackingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 68501DF51BCD523B00E6104C /* RectanglePackingTests.m */; };
 		68501E011BCD523B00E6104C /* RectanglePackingUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 68501E001BCD523B00E6104C /* RectanglePackingUITests.m */; };
-		68501E131BCD564200E6104C /* Tile.m in Sources */ = {isa = PBXBuildFile; fileRef = 68501E121BCD564200E6104C /* Tile.m */; settings = {ASSET_TAGS = (); }; };
-		68501E171BCD5C1000E6104C /* UIColor+Random.m in Sources */ = {isa = PBXBuildFile; fileRef = 68501E161BCD5C1000E6104C /* UIColor+Random.m */; settings = {ASSET_TAGS = (); }; };
-		68501E1A1BCD6FC100E6104C /* NSMutableArray+MultiMutableArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 68501E191BCD6FC100E6104C /* NSMutableArray+MultiMutableArray.m */; settings = {ASSET_TAGS = (); }; };
-		68501E241BCDA5C200E6104C /* TileView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68501E231BCDA5C200E6104C /* TileView.m */; settings = {ASSET_TAGS = (); }; };
+		68501E131BCD564200E6104C /* Tile.m in Sources */ = {isa = PBXBuildFile; fileRef = 68501E121BCD564200E6104C /* Tile.m */; };
+		68501E171BCD5C1000E6104C /* UIColor+Random.m in Sources */ = {isa = PBXBuildFile; fileRef = 68501E161BCD5C1000E6104C /* UIColor+Random.m */; };
+		68501E1A1BCD6FC100E6104C /* NSMutableArray+MultiMutableArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 68501E191BCD6FC100E6104C /* NSMutableArray+MultiMutableArray.m */; };
+		68501E241BCDA5C200E6104C /* TileView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68501E231BCDA5C200E6104C /* TileView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -157,6 +157,8 @@
 		68501E0E1BCD528300E6104C /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				68501DDE1BCD523B00E6104C /* ViewController.h */,
+				68501DDF1BCD523B00E6104C /* ViewController.m */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -164,8 +166,6 @@
 		68501E0F1BCD529200E6104C /* Object */ = {
 			isa = PBXGroup;
 			children = (
-				68501DDE1BCD523B00E6104C /* ViewController.h */,
-				68501DDF1BCD523B00E6104C /* ViewController.m */,
 				68501E111BCD564200E6104C /* Tile.h */,
 				68501E121BCD564200E6104C /* Tile.m */,
 				68501E1E1BCD794300E6104C /* Unit.h */,
@@ -564,6 +564,7 @@
 				68501E071BCD523B00E6104C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		68501E081BCD523B00E6104C /* Build configuration list for PBXNativeTarget "RectanglePackingTests" */ = {
 			isa = XCConfigurationList;
@@ -572,6 +573,7 @@
 				68501E0A1BCD523B00E6104C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		68501E0B1BCD523B00E6104C /* Build configuration list for PBXNativeTarget "RectanglePackingUITests" */ = {
 			isa = XCConfigurationList;
@@ -580,6 +582,7 @@
 				68501E0D1BCD523B00E6104C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

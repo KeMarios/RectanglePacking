@@ -18,7 +18,7 @@
 
 @interface ViewController ()
 
-@property (nonatomic, strong) NSMutableArray <Tile *> *tiles;
+@property (nonatomic, strong) NSMutableArray <TileView *> *tiles;
 @property (nonatomic, strong) NSMutableArray <NSArray *> *packedTiles;
 @property (nonatomic, assign) NSUInteger maxLine;
 
@@ -71,7 +71,7 @@
 #pragma mark
 #pragma mark Array
 
-- (NSMutableArray <Tile *> *)tiles
+- (NSMutableArray <TileView *> *)tiles
 {
     if(!tiles){
         tiles = [[NSMutableArray alloc] init];
@@ -96,7 +96,7 @@
     RatioSizeTiles ratioSizeSmall = RatioSizeTilesMake(small, small.width/small.height);
     CGSize medium = CGSizeMake(2, 1);
     RatioSizeTiles ratioSizeMedium = RatioSizeTilesMake(medium, medium.width/medium.height);
-    CGSize big = CGSizeMake(3, 3);
+    CGSize big = CGSizeMake(4, 2);
     RatioSizeTiles ratioSizeBig = RatioSizeTilesMake(big, big.width/big.height);
     
     self.sizeTiles = SizeTilesMake(ratioSizeSmall, ratioSizeMedium, ratioSizeBig);
@@ -105,9 +105,19 @@
 - (void)generateTiles
 {
     NSUInteger max = RAND_FROM_TO(10, 50);
-    //max = 6;
+    //max = 3;
+    
+    for (UIView *view in self.scrollView.subviews) {
+        if([view isKindOfClass:[TileView class]]){
+            [view removeFromSuperview];
+        }
+    }
+    
     [self.tiles removeAllObjects];
+    
     RatioSizeTiles size;
+    __block Tile *tile;
+    __block TileView *tView;
     
     for (NSInteger i = 0; i < max; i++) {
         size = [self getSizeTileWithTileType:[self randomType]];
@@ -115,9 +125,9 @@
 //        if(i == 0){
 //            size = [self getSizeTileWithTileType:TileTypeBig];
 //        }else if(i == 1){
-//            size = [self getSizeTileWithTileType:TileTypeMedium];
+//            size = [self getSizeTileWithTileType:TileTypeBig];
 //        }else if(i == 2){
-//            size = [self getSizeTileWithTileType:TileTypeMedium];
+//            size = [self getSizeTileWithTileType:TileTypeBig];
 //        }else if(i == 3){
 //            size = [self getSizeTileWithTileType:TileTypeBig];
 //        }else if(i == 4){
@@ -126,14 +136,13 @@
 //            size = [self getSizeTileWithTileType:TileTypeBig];
 //        }
         
-        
         if(size.size.width == 0 || size.size.height == 0){
             continue;
         }
         
-        Tile *tile = [[Tile alloc] initWithRemoteID:@(i) ratioSize:size];
-        [self.tiles addObject:tile];
-        //NSLog(@"tile: %@ size: %@, color: %@", tile.remote_id, NSStringFromCGSize(tile.ratioSize.size), tile.color);
+        tile = [[Tile alloc] initWithRemoteID:@(i) ratioSize:size];
+        tView = [[TileView alloc] initWithTile:tile];
+        [self.tiles addObject:tView];
     }
     
     //NSLog(@"max: %li tiles: %li", (long)max, (long)self.tiles.count);
@@ -149,10 +158,10 @@
     
     [self.packedTiles removeAllObjects];
     
-    NSArray *sortedArrayOfString = [self.tiles sortedArrayUsingComparator:^NSComparisonResult(Tile * _Nonnull obj1, Tile * _Nonnull obj2) {
-        
-        float ration1 = obj1.ratioSize.ratio * (obj1.ratioSize.size.width + obj1.ratioSize.size.height) + (obj1.ratioSize.size.width + obj1.ratioSize.size.height);
-        float ration2 = obj2.ratioSize.ratio * (obj2.ratioSize.size.width + obj2.ratioSize.size.height) + (obj2.ratioSize.size.width + obj2.ratioSize.size.height);
+    // sortowanie ration
+    NSArray *sortedArrayOfString = [self.tiles sortedArrayUsingComparator:^NSComparisonResult(TileView * _Nonnull obj1, TileView * _Nonnull obj2) {
+        float ration1 = obj1.tile.ratioSize.ratio * (obj1.tile.ratioSize.size.width + obj1.tile.ratioSize.size.height) + (obj1.tile.ratioSize.size.width + obj1.tile.ratioSize.size.height);
+        float ration2 = obj2.tile.ratioSize.ratio * (obj2.tile.ratioSize.size.width + obj2.tile.ratioSize.size.height) + (obj2.tile.ratioSize.size.width + obj2.tile.ratioSize.size.height);
         NSLog(@"ratio: %f ratio: %f", ration1, ration2);
         if (ration1 > ration2) {
             return (NSComparisonResult)NSOrderedAscending;
@@ -164,13 +173,13 @@
         return (NSComparisonResult)NSOrderedSame;
     }];
     
-    [sortedArrayOfString enumerateObjectsUsingBlock:^(Tile * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSLog(@"idx: %lu size: %@ i: %lu w: %lu", (unsigned long)idx, NSStringFromCGSize(obj.ratioSize.size), (unsigned long)i, (unsigned long)w);
-        if(w + obj.ratioSize.size.width > self.maxLine){
+    [sortedArrayOfString enumerateObjectsUsingBlock:^(TileView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSLog(@"idx: %lu size: %@ i: %lu j: %lu frame: %@", (unsigned long)idx, NSStringFromCGSize(obj.tile.ratioSize.size), (unsigned long)i, (unsigned long)w, NSStringFromCGRect(obj.frame));
+        if(w + obj.tile.ratioSize.size.width > self.maxLine){
             ++i;
             if(i < self.packedTiles.count){
                 w = [(NSArray *)self.packedTiles[i] count];
-                while (w + obj.ratioSize.size.width > self.maxLine) {
+                while (w + obj.tile.ratioSize.size.width > self.maxLine) {
                     ++i;
                     w = 0;
                     if(i < self.packedTiles.count){
@@ -188,18 +197,18 @@
     //NSLog(@"self.packedTiles: %@", self.packedTiles);
 }
 
-- (void)addTileToPacking:(Tile *)tile index:(NSUInteger)i
+- (void)addTileToPacking:(TileView *)tileView index:(NSUInteger)i
 {
-    CGFloat width = tile.ratioSize.size.width;
+    CGFloat width = tileView.tile.ratioSize.size.width;
     NSUInteger w = width;
-    NSUInteger h = tile.ratioSize.size.height;
-    
+    NSUInteger h = tileView.tile.ratioSize.size.height;
     NSUInteger j = i;
+    BOOL active = YES;
     
     while (w > 0) {
-        [self.packedTiles addObject:tile toIndex:j];
-        //NSLog(@"j: %lu count: %lu remote_id: %@",(unsigned long)j, (unsigned long)[(NSArray *)self.packedTiles[j] count], tile.remote_id);
-        tile = [Tile new];
+        NSLog(@"add: %@", active ? @"YES" : @"NO");
+        [self.packedTiles addObject:@{@"tileView" : tileView, @"active" : @(active)} toIndex:j];
+        active = NO;
         --w;
     }
     
@@ -208,9 +217,59 @@
         --h;
         w = width;
         while (w > 0) {
-            [self.packedTiles addObject:tile toIndex:j];
+            NSLog(@"add: %@", active ? @"YES" : @"NO");
+            [self.packedTiles addObject:@{@"tileView" : tileView, @"active" : @(active)} toIndex:j];
+            active = NO;
             --w;
         }
+    }
+}
+
+#pragma mark
+#pragma mark Create
+
+- (void)createTileView
+{
+    __block TileView *tileView;
+    
+    NSUInteger margin = 10;
+    NSUInteger size = (self.view.bounds.size.width - margin * 2) / self.maxLine;
+    __block BOOL animation;
+    
+    [self.packedTiles enumerateObjectsUsingBlock:^(NSArray * _Nonnull obj, NSUInteger i, BOOL * _Nonnull stop) {
+        [obj enumerateObjectsUsingBlock:^(NSDictionary * _Nonnull dic, NSUInteger j, BOOL * _Nonnull stop) {
+            if([[dic objectForKey:@"active"] boolValue]){
+                tileView = [dic objectForKey:@"tileView"];
+                animation = YES;
+                
+                if(![self.scrollView.subviews containsObject:tileView]){
+                    animation = NO;
+                   [self.scrollView addSubview:tileView];
+                }
+                
+                [self performUIChanges:^{
+                    tileView.frame = CGRectMake(margin + j * size, margin + i * size, tileView.tile.ratioSize.size.width * size, tileView.tile.ratioSize.size.height * size);
+                } completion:nil animated:animation];
+                
+                NSLog(@"i: %lu j: %lu w: %lu h: %lu frame: %@", (unsigned long)i, (unsigned long)j, (unsigned long)tileView.tile.ratioSize.size.width, (unsigned long)tileView.tile.ratioSize.size.height, NSStringFromCGRect(tileView.frame));
+            }
+        }];
+    }];
+    NSLog(@"---------------");
+}
+
+- (void)performUIChanges:(void(^)(void))changes completion:(void(^)(void))completion animated:(BOOL)animated
+{
+    if ( animated ){
+        [UIView animateWithDuration:1.25 delay:0.0 usingSpringWithDamping:0.7 initialSpringVelocity:0.9 options:0 animations:^{
+            if(changes)changes();
+        } completion:^(BOOL finished) {
+            if(completion)completion();
+        }];
+    }
+    else{
+        if(changes)changes();
+        if(completion)completion();
     }
 }
 
@@ -219,7 +278,6 @@
 
 - (TileType)randomType
 {
-    //return TileTypeBig;
     return arc4random_uniform(3);
 }
 
@@ -246,35 +304,6 @@
 }
 
 #pragma mark
-#pragma mark Create
-
-- (void)createTileView
-{
-    for (UIView *view in self.scrollView.subviews) {
-        if([view isKindOfClass:[TileView class]]){
-            [view removeFromSuperview];
-        }
-    }
-    
-    NSUInteger margin = 10;
-    NSUInteger size = (self.view.bounds.size.width - margin * 2) / self.maxLine;
-    __block TileView *view;
-    
-    [self.packedTiles enumerateObjectsUsingBlock:^(NSArray * _Nonnull obj, NSUInteger i, BOOL * _Nonnull stop) {
-        [obj enumerateObjectsUsingBlock:^(Tile * _Nonnull tile, NSUInteger j, BOOL * _Nonnull stop) {
-            if(tile.remote_id){
-                view = [[TileView alloc] init];
-                view.backgroundColor = tile.color;
-                view.frame = CGRectMake(margin + j * size, margin + i * size, tile.ratioSize.size.width * size, tile.ratioSize.size.height * size);
-                [self.scrollView addSubview:view];
-                NSLog(@"i: %lu j: %lu w: %lu h: %lu frame: %@", (unsigned long)i, (unsigned long)j, (unsigned long)tile.ratioSize.size.width, (unsigned long)tile.ratioSize.size.height, NSStringFromCGRect(view.frame));
-            }
-        }];
-    }];
-    NSLog(@"---------------");
-}
-
-#pragma mark
 #pragma mark Orientations
 
 - (BOOL)shouldAutorotate
@@ -287,17 +316,17 @@
     return (UIInterfaceOrientationMaskAll);
 }
 
-- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-{
-    if (UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation)){
-        //NSLog(@"i am in landscape mode");
-        [self changeOrientation];
-    }
-    if (UIDeviceOrientationIsPortrait([UIDevice currentDevice].orientation)){
-        //NSLog(@"i am in portrait mode");
-        [self changeOrientation];
-    }
-}
+//- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+//{
+//    if (UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation)){
+//        //NSLog(@"i am in landscape mode");
+//        [self changeOrientation];
+//    }
+//    if (UIDeviceOrientationIsPortrait([UIDevice currentDevice].orientation)){
+//        //NSLog(@"i am in portrait mode");
+//        [self changeOrientation];
+//    }
+//}
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {

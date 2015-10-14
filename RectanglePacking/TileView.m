@@ -10,10 +10,12 @@
 
 @implementation TileView
 
-- (instancetype)init
+- (instancetype)initWithTile:(Tile *)tile
 {
     self = [super init];
     if (self) {
+        _tile = tile;
+        self.backgroundColor = _tile.color;
         self.layer.borderColor = [UIColor blackColor].CGColor;
         self.layer.borderWidth = 1.0f;
     }

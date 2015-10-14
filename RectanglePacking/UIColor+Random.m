@@ -12,9 +12,9 @@
 
 + (UIColor *)randomColor
 {
-    int red = arc4random() % 255;
-    int green = arc4random() % 255;
-    int blue = arc4random() % 255;
+    int red = arc4random() % 254 + 1;
+    int green = arc4random() % 254 + 1;
+    int blue = arc4random() % 254 + 1;
     
 //    red = 10;
 //    green = 10;
