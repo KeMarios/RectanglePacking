@@ -23,7 +23,8 @@
 @property (nonatomic, assign) NSUInteger maxLine;
 
 @property (nonatomic, assign) SizeTiles sizeTiles;
-@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (nonatomic, weak) IBOutlet UIScrollView *scrollView;
+@property (nonatomic, strong) IBOutlet UIView *containerView;
 
 @end
 
@@ -35,15 +36,21 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
-    NSString *appName = [[NSBundle bundleWithIdentifier:[[NSBundle mainBundle] bundleIdentifier]] objectForInfoDictionaryKey:@"CFBundleExecutable"];
-    [self.navigationItem setTitle:appName];
-    
     self.navigationItem.rightBarButtonItem.action = @selector(refresh:);
     self.navigationItem.rightBarButtonItem.target = self;
+    
+    [self autolayoutScrollView];
+    [self setTitleWithTiles:0];
     
     [self generateSize];
     [self generateTiles];
     [self changeOrientation];
+}
+
+- (void)setTitleWithTiles:(NSUInteger)count
+{
+    NSString *appName = [[NSBundle bundleWithIdentifier:[[NSBundle mainBundle] bundleIdentifier]] objectForInfoDictionaryKey:@"CFBundleExecutable"];
+    [self.navigationItem setTitle:[NSString stringWithFormat:@"%@ (%li)", appName, (unsigned long)count]];
 }
 
 - (void)changeOrientation
@@ -105,9 +112,10 @@
 - (void)generateTiles
 {
     NSUInteger max = RAND_FROM_TO(10, 50);
-    //max = 3;
+    //max = 10;
+    [self setTitleWithTiles:max];
     
-    for (UIView *view in self.scrollView.subviews) {
+    for (UIView *view in self.containerView.subviews) {
         if([view isKindOfClass:[TileView class]]){
             [view removeFromSuperview];
         }
@@ -135,6 +143,7 @@
 //        }else if(i == 5){
 //            size = [self getSizeTileWithTileType:TileTypeBig];
 //        }
+//        size = [self getSizeTileWithTileType:TileTypeBig];
         
         if(size.size.width == 0 || size.size.height == 0){
             continue;
@@ -199,14 +208,13 @@
 
 - (void)addTileToPacking:(TileView *)tileView index:(NSUInteger)i
 {
-    CGFloat width = tileView.tile.ratioSize.size.width;
-    NSUInteger w = width;
+    NSUInteger w = tileView.tile.ratioSize.size.width;
     NSUInteger h = tileView.tile.ratioSize.size.height;
     NSUInteger j = i;
     BOOL active = YES;
     
     while (w > 0) {
-        NSLog(@"add: %@", active ? @"YES" : @"NO");
+        //NSLog(@"add: %@", active ? @"YES" : @"NO");
         [self.packedTiles addObject:@{@"tileView" : tileView, @"active" : @(active)} toIndex:j];
         active = NO;
         --w;
@@ -215,9 +223,9 @@
     while (h > 1) {
         ++j;
         --h;
-        w = width;
+        w =  tileView.tile.ratioSize.size.width;
         while (w > 0) {
-            NSLog(@"add: %@", active ? @"YES" : @"NO");
+            //NSLog(@"add: %@", active ? @"YES" : @"NO");
             [self.packedTiles addObject:@{@"tileView" : tileView, @"active" : @(active)} toIndex:j];
             active = NO;
             --w;
@@ -230,32 +238,109 @@
 
 - (void)createTileView
 {
+    // czyszczenie constrains
+    for (UIView *view in self.containerView.subviews) {
+        if([view isKindOfClass:[TileView class]]){
+            [view removeConstraints:view.constraints];
+            [self.containerView removeConstraints:view.constraints];
+            NSLog(@"tileView: %@", view.constraints);
+        }
+    }
+    [self.containerView removeConstraints:self.containerView.constraints];
+    NSLog(@"containerView: %@", self.containerView.constraints);
+    
     __block TileView *tileView;
+    __block TileView *oldTileView;
     
     NSUInteger margin = 10;
     NSUInteger size = (self.view.bounds.size.width - margin * 2) / self.maxLine;
     __block BOOL animation;
     
-    [self.packedTiles enumerateObjectsUsingBlock:^(NSArray * _Nonnull obj, NSUInteger i, BOOL * _Nonnull stop) {
-        [obj enumerateObjectsUsingBlock:^(NSDictionary * _Nonnull dic, NSUInteger j, BOOL * _Nonnull stop) {
+    [self.packedTiles enumerateObjectsUsingBlock:^(NSArray * _Nonnull obj, NSUInteger j, BOOL * _Nonnull stop) {
+        [obj enumerateObjectsUsingBlock:^(NSDictionary * _Nonnull dic, NSUInteger i, BOOL * _Nonnull stop) {
             if([[dic objectForKey:@"active"] boolValue]){
                 tileView = [dic objectForKey:@"tileView"];
                 animation = YES;
                 
-                if(![self.scrollView.subviews containsObject:tileView]){
+                if(![self.containerView.subviews containsObject:tileView]){
                     animation = NO;
-                   [self.scrollView addSubview:tileView];
+                    tileView.translatesAutoresizingMaskIntoConstraints = NO;
+                    [self.containerView addSubview:tileView];
+                }
+                [tileView autosize];
+                
+                NSLog(@"i: %lu j: %lu w: %lu h: %lu", (unsigned long)i, (unsigned long)j, (unsigned long)tileView.tile.ratioSize.size.width, (unsigned long)tileView.tile.ratioSize.size.height);
+                
+                if (i == 0) {
+                    [self.containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[view]"
+                                                                                               options:0
+                                                                                               metrics:0
+                                                                                                 views:@{@"view":tileView}]];
+                }else{
+                    NSUInteger w = [self getWidthTileViewWithIndexI:i-1 indexJ:j];
+                    oldTileView = [self getTileViewWithIndexI:i-w indexJ:j];
+                    [self.containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[view]-0-[view2]"
+                                                                                               options:0
+                                                                                               metrics:0
+                                                                                                 views:@{@"view":oldTileView,
+                                                                                                         @"view2":tileView}]];
                 }
                 
-                [self performUIChanges:^{
-                    tileView.frame = CGRectMake(margin + j * size, margin + i * size, tileView.tile.ratioSize.size.width * size, tileView.tile.ratioSize.size.height * size);
-                } completion:nil animated:animation];
+                if(j == 0){
+                    [self.containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10-[view]"
+                                                                                               options:0
+                                                                                               metrics:0
+                                                                                                 views:@{@"view":tileView}]];
+                }else{
+                    NSUInteger h = [self getHeightTileViewWithIndexI:i indexJ:j-1];
+                    oldTileView = [self getTileViewWithIndexI:i indexJ:j-h];
+                    [self.containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[view]-0-[view2]"
+                                                                                               options:0
+                                                                                               metrics:0
+                                                                                                 views:@{@"view":oldTileView,
+                                                                                                         @"view2":tileView}]];
+                }
                 
-                NSLog(@"i: %lu j: %lu w: %lu h: %lu frame: %@", (unsigned long)i, (unsigned long)j, (unsigned long)tileView.tile.ratioSize.size.width, (unsigned long)tileView.tile.ratioSize.size.height, NSStringFromCGRect(tileView.frame));
+                if(j + tileView.tile.ratioSize.size.height >= self.packedTiles.count){
+                    [self.containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[view]-10-|"
+                                                                                               options:0
+                                                                                               metrics:0
+                                                                                                 views:@{@"view":tileView}]];
+                }
+                
+                [self.containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[view(value)]"
+                                                                                           options:0 metrics:@{@"value" : @(tileView.tile.ratioSize.size.width * size)} views:@{@"view":tileView}]];
+                [self.containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[view(value)]"
+                                                                                           options:0 metrics:@{@"value" : @(tileView.tile.ratioSize.size.height * size)} views:@{@"view":tileView}]];
+                
+                [self.containerView setNeedsUpdateConstraints];
+                [self performUIChanges:^{
+                    [self.containerView layoutIfNeeded];
+                } completion:nil animated:animation];
             }
         }];
     }];
     NSLog(@"---------------");
+}
+
+- (TileView *)getTileViewWithIndexI:(NSUInteger)i indexJ:(NSUInteger)j
+{
+    NSDictionary *dic = self.packedTiles[j][i];
+    return [dic objectForKey:@"tileView"];
+}
+
+- (NSUInteger)getWidthTileViewWithIndexI:(NSUInteger)i indexJ:(NSUInteger)j
+{
+    NSDictionary *dic = self.packedTiles[j][i];
+    TileView *tile = [dic objectForKey:@"tileView"];
+    return tile.tile.ratioSize.size.width;
+}
+
+- (NSUInteger)getHeightTileViewWithIndexI:(NSUInteger)i indexJ:(NSUInteger)j
+{
+    NSDictionary *dic = self.packedTiles[j][i];
+    TileView *tile = [dic objectForKey:@"tileView"];
+    return tile.tile.ratioSize.size.height;
 }
 
 - (void)performUIChanges:(void(^)(void))changes completion:(void(^)(void))completion animated:(BOOL)animated
@@ -301,6 +386,36 @@
             break;
     }
     return size;
+}
+
+#pragma mark
+#pragma mark Autolayout
+
+- (void)autolayoutScrollView
+{
+    self.containerView = [UIView new];
+    self.containerView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.scrollView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.scrollView addSubview:self.containerView];
+    
+    [self.scrollView addConstraints:
+     [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[containerView]-0-|"
+                                             options:0 metrics:nil
+                                               views:@{@"containerView":self.containerView}]];
+    [self.scrollView addConstraints:
+     [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[containerView]-0-|"
+                                             options:0 metrics:nil
+                                               views:@{@"containerView":self.containerView}]];
+    
+    [self.scrollView addConstraints:
+     [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[containerView(==scrollView)]|"
+                                             options:0
+                                             metrics:nil
+                                               views:@{@"containerView":self.containerView,
+                                                       @"scrollView":self.scrollView}]];
+    
+    self.scrollView.backgroundColor = [UIColor redColor];
+    self.containerView.backgroundColor = [UIColor yellowColor];
 }
 
 #pragma mark

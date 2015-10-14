@@ -12,7 +12,10 @@
 @interface TileView : UIView
 
 @property(nonatomic, strong, readonly) Tile *tile;
+@property(nonatomic, weak) NSLayoutConstraint *layoutWidth;
+@property(nonatomic, weak) NSLayoutConstraint *layoutHeight;
 
 - (instancetype)initWithTile:(Tile *)tile;
+- (void)autosize;
 
 @end
